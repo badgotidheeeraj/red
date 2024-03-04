@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div style="display: flex; justify-content: space-between; margin: 20px;">
+        <table
+            style="border: 1px solid #333; font-family: 'Poppins', sans-serif; text-align: left; border-color: #333; border-radius: 10px; width: 100%; margin-bottom: 20px;">
+            <tr>
+                <td colspan="2">
+                    <strong>Request Name:</strong> {{ requestname|title }}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <strong>Client Name:</strong> {{ clientname|title }}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <strong>Date:</strong> {{ date | date:"D d M Y" }}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="border-top: 1px solid #333; margin-top: 10px;"></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <center>
+                        <h5 class="text-center">Format for
+                            {{modulename|title }}</h5>
+                    </center>
+                </td>
+            </tr>
+            <!-- General and Technical Points Rows -->
+            <tr>
+                <th>
+                    <span class="border border-black rounded-2"
+                        style="padding: 6px 10px; font-size: 16px; background-color: #ff451d; color: white; border-radius: 10px">
+                        General Points
+                    </span>
+                </th>
+                <th>
+                    <span class="border border-black rounded-2"
+                        style="padding: 6px 10px; font-size: 16px; background-color: green; color: white; border-radius: 10px">
+                        Technical Points
+                    </span>
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    {% if General %}
+                    <div class="col">
+                        <div style="margin-top: 15px;">
+                            {% for key2, value2 in General.items %}
+                            <span class="link-offset-3 mt-3"
+                                style="font-weight:900; font-family:verdana; text-decoration:underline; font-size:0.9rem">
+                                {{ key2 }}
+                            </span><br>
+                            {% for key3, values3 in value2.items %}
+                            <span class="link-offset-3"
+                                style="text-decoration:underline; font-weight:700; font-size:0.9rem">
+                                {{ key3 }}
+                            </span>
+                            {% for key4, value4 in values3.items %}
+                            <div style="font-size: 14px;">
+                                <span style="font-weight: 400;">{{ key4 }}:</span>
+                                <span style="font-weight:300 ;font-style:italic">{{ value4 }}</span>
+                            </div>
+                            {% endfor %}
+                            {% endfor %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if Technical %}
+                    <div class="col">
+                        <div style="margin-top: 15px;">
+                            {% for key2, value2 in Technical.items %}
+                            <span class="link-offset-3 mt-3"
+                                style="font-weight:900; font-family:verdana; text-decoration:underline; font-size:0.9rem">
+                                {{ key2 }}
+                            </span> <br>
+                            {% for key3, values3 in value2.items %}
+                            <span class="link-offset-3"
+                                style="text-decoration:underline; font-weight:700; font-size:0.9rem">
+                                {{ key3 }}
+                            </span><br>
+                            {% for key4, value4 in values3.items %}
+                            <div style="font-size: 14px;">
+                                <span style="font-weight: 400;">{{ key4 }}:</span>
+                                <span style="font-weight:300 ;font-style:italic">{{ value4 }}</span>
+                            </div>
+                            {% endfor %}
+                            {% endfor %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</body>
+
+</html>

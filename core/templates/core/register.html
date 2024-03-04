@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>signup</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> 
+        <link rel="shortcut icon" href="/static/app-assets/images/ico/favicon.ico" type="image/x-icon">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+        <style>
+            .divider {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .divider-line {
+                flex: 1;
+                border-bottom: 1px solid #979797;
+                margin: 0 0.7em;
+            }
+
+            .custom-button {
+                height: 40px;
+                width: 25%;
+                border-radius: 20px;
+            }
+
+            .custom-input {
+                width: 70%;
+            }
+            .livelogo {
+                position: relative;
+                display: block;
+    
+                & .delay1 {
+                    animation: waves 2.5s linear;
+                    animation-delay: .1s;
+                    animation-iteration-count: infinite;
+                    animation-direction: normal;
+                }
+    
+                & .delay2 {
+                    animation: waves 2.5s linear .7s forwards;
+                    animation-iteration-count: infinite;
+                    animation-direction: normal;
+                }
+    
+                & .delay3 {
+                    animation: waves 2.5s linear 1.3s forwards;
+                    animation-iteration-count: infinite;
+                    animation-direction: normal;
+                }
+            }
+    
+            .livelogo-box {
+                position: relative;
+                z-index: 10;
+            }
+    
+            .circle {
+                display: block;
+                height: 16px;
+                width: 16px;
+                border-radius: 50%;
+                background: #04526c;
+                margin: 10px;
+                transition: 50s ease;
+                position: absolute;
+                top: -2px;
+                left: 21%;
+            }
+    
+            @-webkit-keyframes waves {
+                0% {
+                    transform: scale(1);
+                    opacity: 1;
+                }
+    
+                100% {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <nav class="mt-2 mb-2 navbar-expand-lg navbar navbar-with-menu floating-nav navbar-dark navbar-shadow">
+            <div class="navbar-wrapper">
+                <div class="d-flex align-items-center">
+                    <div class="livelogo">
+                        <div class="livelogo-box">
+                            <img src="/static/assets/img/logo.png" class="mr-3 ml-3 img-fluid rounded-circle" style="width:32px; height:32px;" alt="logo" >
+                        </div>
+                        <div class="circle delay1"></div>
+                        <div class="circle delay2"></div>
+                        <div class="circle delay3"></div>
+                    </div>
+                    <h3 class="m-0" style="color: rgb(21, 21, 110);">CYR</h3>
+                </div>
+            </div>
+        </nav>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 ">
+
+                    <div class="form-group text-center">
+                        <h5>Create New Account</h5>
+                    </div>
+                    <div class="form-group text-center">
+                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                            <button class="btn btn-outline-primary" style="border-radius: 20px;     background-color: white; color: #007bff;">
+                                <img src="/static/assets/img/google.svg" alt="Google Icon"
+                                    width="20" height="20" class="mr-2">
+                                    <span class="d-none d-lg-inline">Login with Google</span>
+                            </button>
+                            <button class="btn btn-outline-info ml-3" style="border-radius: 20px;     background-color: white; color: #17a2b8;">
+                                <img src="/static/assets/img/microsoft.svg"
+                                    alt="Microsoft Icon" width="20" height="20" class="mr-2">
+                                    <span class="d-none d-lg-inline">Login with Microsoft</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <div class="col-10 col-sm-10 col-md-10 col-lg-10 mb-2">
+                            <span style="display: flex; align-items: center;">
+                                <span class="divider-line"></span>
+                                or
+                                <span class="divider-line"></span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-11 ml-3">
+                        <form method='POST'>
+                            {% csrf_token %}
+                            <div class="form-group">
+                                {% comment %} <label for="username" class="ml-3">{{form.username.label}}</label> {% endcomment %}
+                                {{form.username}}
+                                {% if form.username.errors %}
+                                {% for error in form.username.errors %}
+                                {{ error }}
+                                {% endfor %}
+                                {% endif %}
+                            </div>
+                            <div class="form-group">
+                                {% comment %} <label for="name" class="ml-3">{{form.full_name.label}}</label> {% endcomment %}
+                                {{form.full_name}}
+                                {% if form.full_name.errors %}
+                                {% for error in form.full_name.errors %}
+                                {{ error }}
+                                {% endfor %}
+                                {% endif %}
+                            </div>
+                            <div class="form-group">
+                                {% comment %} <label for="email" class="ml-3">{{form.email.label}}</label> {% endcomment %}
+                                {{form.email}}
+                                {% if form.email.errors %}
+                                {% for error in form.email.errors %}
+                                {{ error }}
+                                {% endfor %}
+                                {% endif %}
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    {% comment %} <label for="password" class="ml-3">{{form.password1.label}}</label> {% endcomment %}
+                                    {{form.password1}}
+                                    {% if form.password1.errors %}
+                                    {% for error in form.password1.errors %}
+                                    {{ error }}
+                                    {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="form-group col-md-6">
+                                    {% comment %} <label for="confirmPassword" class="ml-3">{{form.password2.label}}</label> {% endcomment %}
+                                    {{form.password2}}
+                                    {% if form.password2.errors %}
+                                    {% for error in form.password2.errors %}
+                                    {{ error }}
+                                    {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="form-group d-flex justify-content-center">
+
+                                <button type="submit" class="btn btn-primary custom-button">
+                                    Sign Up
+                                </button>
+
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="form-group text-center mt-1">
+                        <h7> <a href="{% url 'userLogin' %}">Already Have a Account?</a> </h7>
+                    </div>
+
+                    <div class="card text-center" style="background-color: rgb(103, 166, 221);">
+                        <div class="card-body">
+                            <h6>Click Here For</h6>
+                            <h4>Instant Review</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 ">
+                    <div>
+                        <video  width="100%" height="auto" autoplay muted loop>
+                            <source src="/static/assets/img/max vid.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script>
+            const showPassword = document.querySelector("#show-loginEye");
+            const passwordField = document.querySelector("#loginEye");
+    
+            showPassword.addEventListener("click", function () {
+                this.classList.toggle("fa-eye");
+                const type = passwordField.getAttribute("type") === "password" ? "text" : "password";
+                passwordField.setAttribute("type", type);
+            })
+        </script>
+    </body>
+
+</html>

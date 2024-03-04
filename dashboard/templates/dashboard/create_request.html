@@ -1,0 +1,1198 @@
+{% extends 'dashboard/shared/base.html' %}
+{% load custom_filters %}
+{% block container %}
+
+<div class="app-content content">
+   <div class="content-wrapper pt-0">
+      <div class="content-body">
+
+         <!-- Create New Request Start -->
+         <section>
+            <!-- Heading -->
+            <div class="row">
+               <div class="col-6">
+                  <h5 style="font-weight: 600;">Request\{{selectedModule}}</h5>
+               </div>
+               <div class="col-6">
+                  <button type="button" id="save"
+                     class="btn btn-outline-dark float-end font-weight-bolder abs-savebtn"
+                     style="padding: 8px 40px;border-radius: 10px;" data-bs-toggle="modal"
+                     data-bs-target="#exampleModal">Save</button>
+               </div>
+            </div>
+            <div class="row mt-3">
+               <!-- ----------------------- -->
+               <!-- General Request Section -->
+               <!-- ----------------------- -->
+               <div class="col-lg-4 col-md-6 col-sm-6 general-points">
+                  <div class="card req_card">
+                     <!-- --------------- -->
+                     <!-- General Heading -->
+                     <!-- --------------- -->
+                     <span class="rounded-3 text-white generalpoints-heading position-absolute fs-6" style="z-index: 2; background-color: #FF0000; padding: 5px 24px; font-weight: 600;">
+                        General Point
+                     </span>
+                     <!-- --------------- -->
+                     <!-- General Content -->
+                     <!-- --------------- -->
+                     <div class="card-body" style="overflow-y: auto;height:100vh;position:relative">
+                        {% for super, suser in generalPoint.items %}
+                        <!-- ------------------------------------------ -->
+                        <!-- Child 1 Heading with Collapse and Checkbox -->
+                        <!-- ------------------------------------------ -->
+                        <div class="card my-1 p-0">
+                           <div class="row mx-0 d-flex justify-content-between align-items-center">
+                              <button class="btn col-9 text-start" type="button" data-bs-toggle="collapse"
+                                 data-bs-target="#{{super|hyphanate}}" aria-expanded="false"
+                                 aria-controls="{{super|hyphanate}}">
+                                 <span for="{{super|hyphanate}}1" class="d-flex justify-content-between"
+                                    style="font-weight: 600;">{{super}}</span>
+                              </button>
+                              <div class="col-3 d-flex justify-content-center align-items-center checkbox-wrapper-40">
+                                 <input type="checkbox" style="margin-bottom: 6px;"
+                                    class="form-check-input super_check_gen" id="{{super|hyphanate}}1"
+                                    value="{{super}}" />
+                              </div>
+                           </div>
+                        </div>
+                        <!-- --------------- -->
+                        <!-- Child 1 Content -->
+                        <!-- --------------- -->
+                        <div class="collapse {% if forloop.counter == 1 %}show{% endif %}" id="{{super|hyphanate}}">
+                           <div class="card card-body">
+                              {% for subk, subv in suser.items %}
+                              <!-- ----------------------------- -->
+                              <!-- Child 2 Heading with Checkbox -->
+                              <!-- ----------------------------- -->
+                              <div class="checkbox-wrapper-40">
+                                 <span class="checkbox fs-6" style="font-weight: 600;">{{subk}}</span>
+                                 <label class="fs-6" for="{{super|hyphanate}}_{{subk|hyphanate}}">
+                                    <input type="checkbox"
+                                       class="ms-3 mb-1 form-check-input {{super|hyphanate}}_parent_General_checkboxes"
+                                       value="{{subk}}" id="{{super|hyphanate}}_{{subk|hyphanate}}">
+                                 </label>
+                              </div>
+                              <!-- --------------- -->
+                              <!-- Child 2 Content -->
+                              <!-- --------------- -->
+                              {% for k,v in subv.items %}
+                              <div class="row align-items-center">
+                                 <!-- ---------------- -->
+                                 <!-- Child 3 Checkbox -->
+                                 <!-- ---------------- -->
+                                 <div class="col-md-2 p-0" style="text-align: center;">
+                                    <div class="checkbox-wrapper-40 d-flex justify-content-center align-items-center">
+                                       <label>
+                                          <input type="checkbox"
+                                             class="form-check-input {{super|hyphanate}}_{{super|hyphanate}}_{{subk|hyphanate}}_General_child_checkboxes m-0"
+                                             value="{{k}}" id="{{super|hyphanate}}_{{k|hyphanate}}">
+                                       </label>
+                                    </div>
+                                 </div>
+                                 <!-- ------------ -->
+                                 <!-- Child 3 Name -->
+                                 <!-- ------------ -->
+                                 <div class="col-md-4 p-0" style="text-align: start;">
+                                    <label for="{{super|hyphanate}}_{{k|hyphanate}}"
+                                       class="form-check-label user-select-none mr-2">{{k}}</label>
+                                 </div>
+                                 <!-- -------------- -->
+                                 <!-- Child 3 Select -->
+                                 <!-- -------------- -->
+                                 <div class="col-md-6 p-0">
+                                    <fieldset class="form-group">
+                                       <select
+                                          class="form-select {{super|hyphanate}}_{{super|hyphanate}}_{{subk|hyphanate}}_General_child_selectboxes"
+                                          id="basicSelect" aria-label="Default select example">
+                                          {% for resourceKey, resourceValue in resources.items %}
+                                          {% if resourceKey == k %}
+                                          {% for item in resourceValue %}
+                                          <option value="{{item}}" {% if v == item %} selected {% endif %}>{{item}}
+                                          </option>
+                                          {% endfor %}
+                                          {% endif %}
+                                          {% endfor %}
+                                       </select>
+                                    </fieldset>
+                                 </div>
+                              </div>
+                              {% endfor %}
+                              {% endfor %}
+                              <!-- -------- -->
+                              <!-- Add Note -->
+                              <!-- -------- -->
+                              <div class="row mt-1 mx-0">
+                                 <span style="font-weight: 700;" class="px-0">Add Note Or Other Attribute(If Any)</span>
+                              </div>
+                              <div class="row mx-0">
+                                 <textarea id="new-message" rows="3" class="rounded-2 {{super|hyphanate}}_note_general"
+                                    style="font-size: 12px; outline: none; resize: none; color: rgb(2, 2, 2);"
+                                    placeholder="Add note..."></textarea>
+                                 <p class="mt-1 small mb-0 p-0 lh-sm text-black">Specify the nature of the content to prepare in
+                                    an informed way</p>
+                              </div>
+                           </div>
+                        </div>
+                        {% endfor %}
+                        <!-- ------------------------------------ -->
+                        <!-- Add Attribute for Custom Requirement -->
+                        <!-- ------------------------------------ -->
+                        <div id="custom_request_general"></div>
+                        <div class="d-flex justify-content-end mt-2">
+                           <button type="button" class="btn rounded-5 text-white"
+                              style="background: #00B2FF9E; font-size: 12px; font-weight: 600; padding: 10px 50px;"
+                              data-bs-toggle="modal" data-bs-target="#exampleModal_general">Add Attribute</button>
+                        </div>
+
+                        <!-- ----- -->
+                        <!-- Add Attribute Modal -->
+                        <!-- ----- -->
+                        <div class="modal fade text-left" id="exampleModal_general" tabindex="-1" role="dialog"
+                           aria-labelledby="myModalLabel_general" aria-hidden="true">
+                           <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+                              <div class="modal-content">
+                                 <div class="modal-header">
+                                    <h4 class="modal-title" id="myModalLabel_general">Create Custom Attribute</h4>
+                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                       <span aria-hidden="true">&times;</span>
+                                    </button>
+                                 </div>
+                                 <form action="#">
+                                    <div class="modal-body">
+                                       <label>Parent: </label>
+                                       <div class="form-group">
+                                          <input type="text" placeholder="Enter the parent value" id="parentforgeneral"
+                                             class="form-control">
+                                       </div>
+
+                                       <label>Key: </label>
+                                       <div class="form-group">
+                                          <input type="text" placeholder="Enter the key" id="keyforgeneral"
+                                             class="form-control">
+                                       </div>
+
+                                       <label>Value: </label>
+                                       <div class="form-group">
+                                          <input type="text" placeholder="Enter the value" id="valueforgeneral"
+                                             class="form-control">
+                                       </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                       <button type="button" class="btn btn-primary" id="subforcustomgeneral"
+                                          data-bs-dismiss="modal">Save</button>
+                                    </div>
+                                 </form>
+                              </div>
+                           </div>
+                        </div>
+
+                     </div>
+                  </div>
+               </div>
+
+               <!-- ------------------------- -->
+               <!-- Technical Request Section -->
+               <!-- ------------------------- -->
+               <div class="col-lg-4 col-md-6 col-sm-6 technical-points" style="position:relative;">
+                  <div class="card req_card">
+                     <!-- ------------------------- -->
+                     <!-- Technical Heading -->
+                     <!-- ------------------------- -->
+                     <span class="rounded-3 text-white technicalpoints-heading position-absolute fs-6"
+                        style=" z-index: 2; padding: 5px 24px; font-weight: 600;background: #23B40C ;">
+                        Technical Point</span>
+                     <!-- --------------- -->
+                     <!-- Technical Content -->
+                     <!-- --------------- -->
+                     <div class="card-body" style="overflow-y: auto;height:100vh;position:relative">
+                        {% for super, suser in technicalPoint.items %}
+                        <!-- ------------------------------------------ -->
+                        <!-- Child 1 Heading with Collapse and Checkbox -->
+                        <!-- ------------------------------------------ -->
+                        <div class="card p-0 my-1">
+                           <div class="row mx-0 d-flex justify-content-between align-items-center">
+                              <button class="btn col-9 text-start" type="button" data-bs-toggle="collapse"
+                                 data-bs-target="#{{super|hyphanate}}" aria-expanded="false"
+                                 aria-controls="{{super|hyphanate}}">
+                                 <span for="{{super|hyphanate}}1" class="d-flex justify-content-between"
+                                    style="font-weight: 600;">{{super}}</span>
+                              </button>
+
+                              <div class="col-3 d-flex justify-content-center align-items-center checkbox-wrapper-40">
+                                 <input type="checkbox" style="margin-bottom: 6px;"
+                                    class=" form-check-input super_check_tec" id="{{super|hyphanate}}1"
+                                    value="{{super}}">
+                              </div>
+                           </div>
+                        </div>
+
+                        <!-- --------------- -->
+                        <!-- Child 1 Content -->
+                        <!-- --------------- -->
+                        <div class="collapse {% if forloop.counter == 1 %} show {% endif %}" id="{{super|hyphanate}}">
+                           <div class="card card-body">
+
+                              {% for subk, subv in suser.items %}
+                              <!-- ----------------------------- -->
+                              <!-- Child 2 Heading with Checkbox -->
+                              <!-- ----------------------------- -->
+
+                              <div class="checkbox-wrapper-40 ">
+                                 <span class="checkbox fs-6 " style="font-weight: 600;">{{subk}}</span>
+                                 <label class="fs-6" for="{{super|hyphanate}}_{{subk|hyphanate}}">
+                                    <input type="checkbox"
+                                       class=" form-check-input ms-3 mb-1 {{super|hyphanate}}_parent_Technical_checkboxes"
+                                       value="{{subk}}" id="{{super|hyphanate}}_{{subk|hyphanate}}">
+                                 </label>
+                              </div>
+                              <!-- --------------- -->
+                              <!-- Child 2 Content -->
+                              <!-- --------------- -->
+                              {% for k,v in subv.items %}
+                              <div class="row align-items-center">
+                                 <!-- ---------------- -->
+                                 <!-- Child 3 Checkbox -->
+                                 <!-- ---------------- -->
+                                 <div class="col-md-2 p-0" style="text-align: center;">
+                                    <div class="checkbox-wrapper-40 d-flex justify-content-center align-items-center">
+                                       <label>
+                                          <input type="checkbox"
+                                             class="form-check-input {{super|hyphanate}}_{{super|hyphanate}}_{{subk|hyphanate}}_Technical_child_checkboxes m-0"
+                                             value="{{k}}" id="{{super|hyphanate}}_{{k|hyphanate}}">
+                                       </label>
+                                    </div>
+
+                                 </div>
+                                 <!-- ------------ -->
+                                 <!-- Child 3 Name -->
+                                 <!-- ------------ -->
+                                 <div class="col-md-4 p-0" style="text-align: start;">
+                                    <label for="{{super|hyphanate}}_{{k|hyphanate}}"
+                                       class="form-check-label user-select-none mr-2">{{k}}</label>
+                                 </div>
+                                 <!-- -------------- -->
+                                 <!-- Child 3 Select -->
+                                 <!-- -------------- -->
+                                 <div class="col-md-6 p-0">
+                                    <fieldset class="form-group">
+                                       <select
+                                          class="form-select {{super|hyphanate}}_{{super|hyphanate}}_{{subk|hyphanate}}_Technical_child_selectboxes"
+                                          id="basicSelect" aria-label="Default select example" style="font-size: 12px;">
+                                          {% for resourceKey, resourceValue in resources.items %}
+                                          {% if resourceKey == k %}
+                                          {% for item in resourceValue %}
+                                          <option value="{{item}}" {% if v == item %} selected {% endif %}>{{item}}
+                                          </option>
+                                          {% endfor %}
+                                          {% endif %}
+                                          {% endfor %}
+                                       </select>
+                                    </fieldset>
+                                 </div>
+                              </div>
+                              {% endfor %}
+                              {% endfor %}
+                              <!-- -------- -->
+                              <!-- Add Note -->
+                              <!-- -------- -->
+                              <div class="row mt-1 mx-0">
+                                 <span style="font-weight: 700;" class="px-0">Add Note Or Other Attribute(If Any)</span>
+                              </div>
+                              <div class="row mx-0">
+                                 <textarea id="new-message" rows="3" class="rounded-2 {{super|hyphanate}}_note_technical"
+                                    style="font-size: 12px; outline: none; resize: none; color: rgb(2, 2, 2);"
+                                    placeholder="Add note..."></textarea>
+                                 <p class="mt-1 small mb-0 p-0 lh-sm" style="font-weight: 400;">Specify the nature of the content to prepare in
+                                    an informed way</p>
+                              </div>
+                           </div>
+                        </div>
+
+                        {% endfor %}
+                         <!-- ------------------------------------ -->
+                        <!-- Add Attribute for Custom Requirement -->
+                        <!-- ------------------------------------ -->
+                        <div id="custom_request_technical"></div>
+
+                        <div class="d-flex justify-content-end mt-2">
+                           <button type="button" class="btn rounded-5 text-white"
+                           style="background: #00B2FF9E; font-size: 12px; font-weight: 600; padding: 10px 50px;"
+                           data-bs-toggle="modal"  data-bs-target="#exampleModal_technical">
+                              Add Attribute
+                           </button>
+                        </div>
+
+                        <!-- ----- -->
+                        <!-- Add Attribute Modal -->
+                        <!-- ----- -->
+                        <div class="modal fade text-left" id="exampleModal_technical" tabindex="-1" role="dialog"
+                           aria-labelledby="myModalLabel_technical" aria-hidden="true">
+                           <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+                              <div class="modal-content">
+                                 <div class="modal-header">
+                                    <h4 class="modal-title" id="myModalLabel_technical">Create Custom Attribute</h4>
+                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                       <span aria-hidden="true">&times;</span>
+                                    </button>
+                                 </div>
+                                 <form action="#">
+                                    <div class="modal-body">
+                                       <label>Parent: </label>
+                                       <div class="form-group">
+                                          <input type="text" placeholder="Enter the parent value"
+                                             id="parentfortechnical" class="form-control">
+                                       </div>
+
+                                       <label>Key: </label>
+                                       <div class="form-group">
+                                          <input type="text" placeholder="Enter the key" id="keyfortechnical"
+                                             class="form-control">
+                                       </div>
+
+                                       <label>Value: </label>
+                                       <div class="form-group">
+                                          <input type="text" placeholder="Enter the value" id="valuefortechnical"
+                                             class="form-control">
+                                       </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                       <button type="button" class="btn btn-primary" id="subforcustomtechnical"
+                                          data-bs-dismiss="modal">Save</button>
+                                    </div>
+                                 </form>
+                              </div>
+                           </div>
+                        </div>
+
+                     </div>
+                  </div>
+               </div>
+
+               <!-- ------------------- -->
+               <!-- PDF Preview Section -->
+               <!-- ------------------- -->
+               <div class="col-lg-4 col-md-12 col-12 pdf-section">
+                  <div class="card border border-dark rounded-0 mb-1">
+                     <div class="card-body pt-0 px-1 pb-1" style="overflow-y: auto;height:100vh;">
+                        <div class="row text-start">
+                           <h6 class="m-0" style="font-size: 9px;padding: 5px 14px 1px;color: #0000008e;">Generated by {{request.user.full_name}}</h6>
+                           <hr class="border-1 border-dark border-1 m-0 p-0 opacity-50">
+                           <h6 class="text-center" style="margin-top: 4px;">Format for {{selectedModule}}</h6>
+
+                           <!-- --------------------- -->
+                           <!-- General Point Preview -->
+                           <!-- --------------------- -->
+                           <div class="col-6">
+                              <div class="border-1 border-black rounded-3 text-center me-lg-4 me-md-2 me-sm-0 me-0" style="padding: 3px 2px;font-size: 11px;color:white;background-color: #FF0000;">
+                                 General Points
+                              </div>
+                              <div>
+                                 <div id="preview" style="font-size: 10px;line-height: 15px; letter-spacing: 0.7px;">
+                                     <!-- Data for general points will be displayed here -->
+                                 </div>
+                              </div>
+                           </div>
+
+                           <!-- ----------------------- -->
+                           <!-- Technical Point Preview -->
+                           <!-- ----------------------- -->
+                           <div class="col-6">
+                              <div class="border-1 border-black rounded-3 text-center me-lg-4 me-md-2 me-sm-0 me-0" style="padding: 3px 2px;font-size: 11px;;background-color: #23B40C;color:white">
+                                 Technical Points
+                              </div>
+                              <div>
+                                 <div id="preview_display_for_technical" style="font-size: 10px;line-height: 15px; letter-spacing: 0.6px;">
+                                    <!-- Data for general points will be displayed here -->
+                                 </div>
+                              </div>
+                           </div>
+
+                        </div>
+                     </div>
+                  </div>
+               </div>
+
+               <!-- ------------------ -->
+               <!-- Save Request Modal -->
+               <!-- ------------------ -->
+               <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
+                     <div class="modal-content" style="width: 480px;">
+                        <div class="modal-header">
+                           <h1 class="modal-title fs-5" id="exampleModalLabel">Create Request Name</h1>
+                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form method="POST" autocomplete="off" id="request_creation_form">
+                           <div class="modal-body">
+                              <div class="row">
+                                 <div class="col-12">
+                                    <input type="text" class="form-control align-content-center" name="requestName"
+                                       id="requestName" required placeholder="Request Name">
+                                    <span id="duplicatename" class='text-danger'></span>
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                              <button type="submit" class="btn btn-primary">Save</button>
+                           </div>
+                        </form>
+                     </div>
+                  </div>
+               </div>
+
+            </div>
+         </section>
+
+      </div>
+   </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+   var moduleId = "{{selectedModule.id}}";
+
+   document.addEventListener('DOMContentLoaded', function () {
+      var jsonData = {
+         'General Point': {},
+         'Technical Point': {},
+      };
+
+      //------------------------------------------------------general data--------------------------------------- 
+      function general_main() {
+         var gen_super_check = document.querySelectorAll('.super_check_gen');
+         gen_super_check.forEach((gen_super_check_value, index) => { // Added 'index' parameter
+            gen_super_check_value.checked = true;
+            gen_super_parent(gen_super_check_value);
+            gen_super_check_value.addEventListener('click', function () {
+               gen_super_parent(gen_super_check_value);
+            });
+         });
+      }
+
+      function gen_super_parent(gen_super_check_value) {
+         var gen_super_check_value1 = gen_super_check_value.value;
+         var gen_super_check_value2 = gen_super_check_value1.replace(/\s/g, '_');
+         // gen_super_check_value.checked = true;
+         const note1 = document.querySelectorAll('.' + gen_super_check_value2 + '_note_general');
+         const parent_General_checkboxes = document.querySelectorAll("." + gen_super_check_value2 + "_parent_General_checkboxes"); // Fixed accessing 'value' property
+         if (gen_super_check_value.checked) {
+
+            if (!jsonData['General Point'][gen_super_check_value.value]) { // Fixed accessing 'value' property
+               jsonData['General Point'][gen_super_check_value.value] = {}; // Fixed accessing 'value' property
+               preview_display();
+            }
+
+            parent_General_checkboxes.forEach(checkbox => {
+               checkbox.checked = true;
+               const checkboxValue = checkbox.value;
+               for_parent_gen(checkbox, gen_super_check_value.value, checkboxValue, gen_super_check_value); // Fixed accessing 'value' property
+               // custon_chec();
+               checkbox.addEventListener('change', function () {
+                  for_parent_gen(checkbox, gen_super_check_value.value, checkboxValue, gen_super_check_value); // Fixed accessing 'value' property
+                  // custon_chec();
+               });
+            });
+
+            add_note_general(gen_super_check_value, note1);
+
+         } else {
+            // gen_super_check[index].checked = false;
+            note1.forEach(note_ele => {
+               note_ele.value = '';
+            });
+
+            gen_super_check_value.checked = false;
+            parent_General_checkboxes.forEach(checkbox => {
+               checkbox.checked = false;
+               const checkboxValue = checkbox.value;
+               for_parent_gen(checkbox, gen_super_check_value.value, checkboxValue, gen_super_check_value);
+               checkbox.addEventListener('change', function () {
+                  for_parent_gen(checkbox, gen_super_check_value.value, checkboxValue, gen_super_check_value);
+               });
+            });
+            delete jsonData['General Point'][gen_super_check_value.value]; // Fixed accessing 'value' property
+            preview_display();
+            // custon_chec();
+         }
+      }
+
+      function for_parent_gen(checkbox, gen_super_check_value, checkboxValue, gen_super_check_checked) {
+         var gen_super_check_value1 = gen_super_check_value;
+         var gen_super_check_value2 = gen_super_check_value1.replace(/\s/g, '_');
+
+         const checkboxes = document.querySelectorAll('.' + gen_super_check_value2 + '_' + checkbox.id + '_General_child_checkboxes');
+         const selectboxes = document.querySelectorAll('.' + gen_super_check_value2 + '_' + checkbox.id + '_General_child_selectboxes');
+
+         if (checkbox.checked) {
+            // Parent checkbox is checked
+            gen_super_check_checked.checked = true;
+
+            if (!jsonData['General Point'][gen_super_check_value]) {
+               jsonData['General Point'][gen_super_check_value] = {};
+               preview_display();
+            }
+
+            if (!jsonData['General Point'][gen_super_check_value][checkboxValue]) {
+               jsonData['General Point'][gen_super_check_value][checkboxValue] = {};
+               preview_display();
+            }
+
+            checkboxes.forEach((check2, index) => {
+               check2.checked = true;
+               child_data_check_gen(check2, index, gen_super_check_value, checkboxValue, selectboxes, checkbox, gen_super_check_checked);
+
+               check2.addEventListener('change', function () {
+                  child_data_check_gen(check2, index, gen_super_check_value, checkboxValue, selectboxes, checkbox, gen_super_check_checked);
+               });
+
+               child_data_select_gen(check2, index, gen_super_check_value, checkboxValue, selectboxes);
+            });
+         } else {
+            // Parent checkbox is unchecked
+            delete jsonData['General Point'][gen_super_check_value][checkboxValue];
+            preview_display();
+
+            checkboxes.forEach((check2, index) => {
+               check2.checked = false;
+               selectboxes[index].disabled = true;
+            });
+         }
+      }
+
+      function child_data_check_gen(check2, index, gen_super_check_value, checkboxValue, selectboxes, checkbox, gen_super_check_checked) {
+         if (check2.checked) {
+            // console.log('it is check2.checked', check2.checked)
+            selectboxes[index].disabled = false;
+            checkbox.checked = true;
+            gen_super_check_checked.checked = true;
+
+            if (!jsonData['General Point'][gen_super_check_value]) {
+               jsonData['General Point'][gen_super_check_value] = {};
+               preview_display();
+            }
+
+            if (!jsonData['General Point'][gen_super_check_value][checkboxValue]) {
+               jsonData['General Point'][gen_super_check_value][checkboxValue] = {};
+               preview_display();
+            }
+
+            jsonData['General Point'][gen_super_check_value][checkboxValue][check2.value] = selectboxes[index].value;
+            preview_display();
+         }
+         else {
+            //if (checkboxValue === 'Font' && check2.value === 'Font Style' && check2.id === 'Abstract_Format_Font_Style') {
+
+            // console.log('hello create request', gen_super_check_value)
+
+            delete jsonData['General Point'][gen_super_check_value][checkboxValue][check2.value]
+            preview_display();
+            selectboxes[index].disabled = true;
+            //}
+         }
+      }
+
+      function child_data_select_gen(check2, index, gen_super_check_value, checkboxValue, selectboxes) {
+         selectboxes[index].disabled = false;
+         selectboxes[index].addEventListener('change', function () {
+            jsonData['General Point'][gen_super_check_value][checkboxValue][check2.value] = selectboxes[index].value;
+            preview_display();
+         });
+      }
+
+      // add note code general section
+      function add_note_general(gen_super_check_value, note1) {
+         note1.forEach(note_ele => {
+            note_ele.addEventListener('input', function (event) {
+               let note_val = event.target.value;
+               let Add_Note = 'Add_Note';
+               let Note = 'Note';
+               if (note_val.length > 0) {
+                  if (gen_super_check_value.checked) {
+                     if (!jsonData['General Point'][gen_super_check_value.value]) {
+                        jsonData['General Point'][gen_super_check_value.value] = {};
+                        // preview_display();
+                     }
+                     if (!jsonData['General Point'][gen_super_check_value.value][Add_Note]) {
+                        jsonData['General Point'][gen_super_check_value.value][Add_Note] = {};
+                        // preview_display();
+                     }
+                     jsonData['General Point'][gen_super_check_value.value][Add_Note][Note] = note_val;
+                     preview_display();
+                  } else {
+                     delete jsonData['General Point'][gen_super_check_value.value];
+                     preview_display();
+                  }
+
+               }
+               else {
+                  delete jsonData['General Point'][gen_super_check_value.value][Add_Note];
+                  preview_display();
+               }
+            });
+         });
+      }
+
+      // gen_super_parent();
+
+      general_main();
+
+
+
+
+
+
+
+      //custom code general
+
+      $(document).ready(function () {
+         customjsonforgeneral = { 'Custom General': {} };
+
+         var $submitforgeneralcustom = $('#subforcustomgeneral');
+
+         $submitforgeneralcustom.on('click', function () {
+            // $(document).on('click', '#subforcustomgeneral', function () {
+            // Get values from input elements
+            var $parentforgeneral = $('#parentforgeneral');
+            var $keyforgeneral = $('#keyforgeneral');
+            var $valueforgeneral = $('#valueforgeneral');
+
+            // Create a new object and add it to the 'custom' object
+            if (!customjsonforgeneral['Custom General'][$parentforgeneral.val()]) {
+               customjsonforgeneral['Custom General'][$parentforgeneral.val()] = {};
+            }
+            customjsonforgeneral['Custom General'][$parentforgeneral.val()][$keyforgeneral.val()] = $valueforgeneral.val();
+
+            // Check if 'custom' has some customjsonforgeneral after the button click
+            if (Object.keys(customjsonforgeneral['Custom General']).length > 0) {
+               var htmlContentGeneral = '';
+
+               for (const custom_general_super in customjsonforgeneral) {
+                  var custom_general_super_un1 = custom_general_super;
+                  var custom_general_super_un = custom_general_super_un1.replace(/\s/g, '_');
+                  htmlContentGeneral += `
+            <p>
+                <div class="card card-body p-0 m-0 border border-danger">
+                    <div class="row">
+                
+                        <button class="btn col-xxl-9 col-md-8 col-xl-9 col-lg-8 ms-3" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#${custom_general_super_un}" aria-expanded="false"
+                            aria-controls="${custom_general_super_un}">
+                    
+                            <span for="${custom_general_super}1"
+                                        class="d-flex justify-content-between">
+                                        <span class="text-dark">${custom_general_super}</span>
+                            </span>
+
+                        </button>
+
+                        <div class="col-2 d-flex justify-content-center align-items-center checkbox-wrapper-40 ">                        
+                            <input type="checkbox" style="margin-bottom: 6px;" class="form-check-input super_check_gen" id="${custom_general_super_un}1" value="${custom_general_super}" />                      
+                        </div>
+                
+                        
+                    </div>
+                </div>
+            </p>
+
+            <div>
+            <div class="collapse show" id="${custom_general_super_un}">
+            <div class="card card-body">`;
+
+                  const parent_value = customjsonforgeneral[custom_general_super];
+
+                  for (const custom_general_parent in parent_value) {
+                     var custom_general_parent_un1 = custom_general_parent;
+                     var custom_general_parent_un = custom_general_parent_un1.replace(/\s/g, '_');
+                     htmlContentGeneral += `
+             
+                <div style="margin-top: 7px;">
+
+                  <div class="checkbox-wrapper-40 " style="margin-top: 7px;">
+                    <span class="checkbox text-dark fw-bold  fs-6 ">${custom_general_parent}</span>
+                    <label class="fs-6 mr-3" for="${custom_general_super_un}_${custom_general_parent_un}">
+                        <input type="checkbox" class="ms-3 mb-1 form-check-input ${custom_general_super_un}_parent_General_checkboxes" value="${custom_general_parent}" id="${custom_general_super_un}_${custom_general_parent_un}">
+                    </label>
+                  </div>
+ 
+                </div>`;
+
+                     const childkey = parent_value[custom_general_parent];
+
+                     for (const custom_general_child in childkey) {
+                        htmlContentGeneral += `
+                <div class="row align-items-center pt-1">
+                  <div class="col-md-2 p-0" style="text-align: end;">
+                    <fieldset>
+
+                    <div class="checkbox-wrapper-40 ">
+                      <label>
+                          <input type="checkbox" class="me-2 form-check-input ${custom_general_super_un}_${custom_general_super_un}_${custom_general_parent_un}_General_child_checkboxes" value="${custom_general_child}" id="${custom_general_super_un}_${custom_general_child}">
+                      </label>
+                    </div>
+
+                    </fieldset>
+                  </div>
+                  <div class="col-md-5 p-0" style="text-align: start;">
+                    <span class="form-check-label  mr-3">${custom_general_child}</span>
+                  </div>
+                  <div class="col-md-4 p-0">
+                    <fieldset class="form-group">
+                      <select class="form-select ${custom_general_super_un}_${custom_general_super_un}_${custom_general_parent_un}_General_child_selectboxes"
+                        id="basicSelect" aria-label="Default select example">
+                        <option selected>${childkey[custom_general_child]}</option>
+                      </select>
+                    </fieldset>
+                  </div>
+                </div>`;
+                     }
+                  }
+                  htmlContentGeneral += `</div></div></div>`; // Close the collapse div for the super
+               }
+
+               // Update the HTML content of 'custom_request_general' after the loop
+               $('#custom_request_general').html(htmlContentGeneral);
+               // general_main();
+
+               function general_main1() {
+
+                  var gen_super_check = document.querySelector('#Custom_General1');
+                  console.log('gen_super_check', gen_super_check);
+                  gen_super_check.checked = true;
+                  gen_super_parent(gen_super_check);
+                  gen_super_check.addEventListener('click', function () {
+                     gen_super_parent(gen_super_check);
+                  });
+               }
+
+               general_main1();
+
+            }
+         });
+      });
+
+      function technical_main() {
+         var tec_super_check = document.querySelectorAll('.super_check_tec');
+         tec_super_check.forEach((tec_super_check_value, index) => { // Added 'index' parameter
+            tec_super_check_value.checked = true;
+            tec_super_parent(tec_super_check_value);
+            tec_super_check_value.addEventListener('click', function () {
+               tec_super_parent(tec_super_check_value);
+            });
+         });
+      }
+
+      function tec_super_parent(tec_super_check_value) {
+         var tec_super_check_value1 = tec_super_check_value.value;
+         var tec_super_check_value2 = tec_super_check_value1.replace(/\s/g, '_');
+
+         const note1 = document.querySelectorAll('.' + tec_super_check_value2 + '_note_technical');
+         const parent_Technical_checkboxes = document.querySelectorAll("." + tec_super_check_value2 + "_parent_Technical_checkboxes"); // Fixed accessing 'value' property
+         if (tec_super_check_value.checked) {
+            if (!jsonData['Technical Point'][tec_super_check_value.value]) { // Fixed accessing 'value' property
+               jsonData['Technical Point'][tec_super_check_value.value] = {}; // Fixed accessing 'value' property
+               preview_display();
+            }
+            parent_Technical_checkboxes.forEach(checkbox => {
+               checkbox.checked = true;
+               const checkboxValue = checkbox.value;
+               for_parent_tec(checkbox, tec_super_check_value.value, checkboxValue, tec_super_check_value); // Fixed accessing 'value' property
+               // custon_chec();
+               checkbox.addEventListener('change', function () {
+                  for_parent_tec(checkbox, tec_super_check_value.value, checkboxValue, tec_super_check_value); // Fixed accessing 'value' property
+                  // custon_chec();
+               });
+            });
+
+            add_note_technical(tec_super_check_value, note1);
+
+         } else {
+            tec_super_check_value.checked = false;
+            note1.forEach(t123 => {
+               t123.value = '';
+            });
+            parent_Technical_checkboxes.forEach(checkbox => {
+               checkbox.checked = false;
+               const checkboxValue = checkbox.value;
+               for_parent_tec(checkbox, tec_super_check_value.value, checkboxValue, tec_super_check_value);
+               checkbox.addEventListener('change', function () {
+                  for_parent_tec(checkbox, tec_super_check_value.value, checkboxValue, tec_super_check_value);
+               });
+            });
+            delete jsonData['Technical Point'][tec_super_check_value.value]; // Fixed accessing 'value' property
+            preview_display();
+            // custon_chec();
+         }
+      }
+
+      function for_parent_tec(checkbox, tec_super_check_value, checkboxValue, tec_super_check_checked) {
+         var tec_super_check_value1 = tec_super_check_value;
+         var tec_super_check_value2 = tec_super_check_value1.replace(/\s/g, '_');
+
+         const checkboxes = document.querySelectorAll('.' + tec_super_check_value2 + '_' + checkbox.id + '_Technical_child_checkboxes');
+         const selectboxes = document.querySelectorAll('.' + tec_super_check_value2 + '_' + checkbox.id + '_Technical_child_selectboxes');
+
+         if (checkbox.checked) {
+            tec_super_check_checked.checked = true;
+            if (!jsonData['Technical Point'][tec_super_check_value]) {
+               jsonData['Technical Point'][tec_super_check_value] = {};
+               preview_display();
+            }
+
+            if (!jsonData['Technical Point'][tec_super_check_value][checkboxValue]) {
+               jsonData['Technical Point'][tec_super_check_value][checkboxValue] = {};
+               preview_display();
+            }
+
+            checkboxes.forEach((check2, index) => {
+               check2.checked = true;
+               child_data_check_tec(check2, index, tec_super_check_value, checkboxValue, selectboxes, checkbox, tec_super_check_checked);//call child function 
+               // custon_chec();
+               check2.addEventListener('change', function () {
+                  child_data_check_tec(check2, index, tec_super_check_value, checkboxValue, selectboxes, checkbox, tec_super_check_checked);//call child function on change event 
+                  // custon_chec();
+               });
+               child_data_select_tec(check2, index, tec_super_check_value, checkboxValue, selectboxes)////call child function
+               // custon_chec();
+            });
+         }
+         else {
+            delete jsonData['Technical Point'][tec_super_check_value][checkboxValue];
+            preview_display();
+            checkboxes.forEach((check2, index) => {
+               check2.checked = false;
+               selectboxes[index].disabled = true;
+            });
+         }
+      }
+
+      function child_data_check_tec(check2, index, tec_super_check_value, checkboxValue, selectboxes, checkbox, tec_super_check_checked) {
+         if (check2.checked) {
+            selectboxes[index].disabled = false;
+            checkbox.checked = true;
+            tec_super_check_checked.checked = true;
+
+            if (!jsonData['Technical Point'][tec_super_check_value]) {
+               jsonData['Technical Point'][tec_super_check_value] = {};
+               preview_display();
+            }
+            if (!jsonData['Technical Point'][tec_super_check_value][checkboxValue]) {
+               jsonData['Technical Point'][tec_super_check_value][checkboxValue] = {};
+               preview_display();
+            }
+            jsonData['Technical Point'][tec_super_check_value][checkboxValue][check2.value] = selectboxes[index].value;
+            preview_display();
+         }
+         else {
+            delete jsonData['Technical Point'][tec_super_check_value][checkboxValue][check2.value]
+            preview_display();
+            selectboxes[index].disabled = true;
+         }
+      }
+
+      function child_data_select_tec(check2, index, tec_super_check_value, checkboxValue, selectboxes) {
+         selectboxes[index].disabled = false;
+         selectboxes[index].addEventListener('change', function () {
+            jsonData['Technical Point'][tec_super_check_value][checkboxValue][check2.value] = selectboxes[index].value;
+            preview_display();
+         });
+      }
+
+      // add note code technical section
+      function add_note_technical(tec_super_check_value, note1) {
+
+         note1.forEach(note_ele => {
+            note_ele.addEventListener('input', function (event) {
+               let note_val = event.target.value;
+               let Add_Note = 'Add_Note';
+               let Note = 'Note';
+               if (note_val.length > 0) {
+                  if (tec_super_check_value.checked) {
+                     if (!jsonData['Technical Point'][tec_super_check_value.value]) {
+                        jsonData['Technical Point'][tec_super_check_value.value] = {};
+                        // preview_display();
+                     }
+                     console.log('parent data=====', jsonData)
+                     if (!jsonData['Technical Point'][tec_super_check_value.value][Add_Note]) {
+                        jsonData['Technical Point'][tec_super_check_value.value][Add_Note] = {};
+                        // preview_display();
+                     }
+                     jsonData['Technical Point'][tec_super_check_value.value][Add_Note][Note] = note_val;
+                     preview_display();
+                  } else {
+                     delete jsonData['Technical Point'][tec_super_check_value.value];
+                     preview_display();
+                  }
+
+               }
+               else {
+                  delete jsonData['Technical Point'][tec_super_check_value.value][Add_Note];
+                  preview_display();
+               }
+            });
+         });
+      }
+
+      technical_main();
+
+
+
+      //custom for technical
+      $(document).ready(function () {
+         customjsonfortechnical = { 'Custom Technical': {} };
+
+         var $submitfortechnicalcustom = $('#subforcustomtechnical');
+
+         $submitfortechnicalcustom.on('click', function () {
+            // $(document).on('click', '#subforcustomtechnical', function () {
+
+            // Get values from input elements
+            var $parentfortechnical = $('#parentfortechnical');
+            var $keyfortechnical = $('#keyfortechnical');
+            var $valuefortechnical = $('#valuefortechnical');
+
+            // Create a new object and add it to the 'custom' object
+            if (!customjsonfortechnical['Custom Technical'][$parentfortechnical.val()]) {
+               customjsonfortechnical['Custom Technical'][$parentfortechnical.val()] = {};
+            }
+            customjsonfortechnical['Custom Technical'][$parentfortechnical.val()][$keyfortechnical.val()] = $valuefortechnical.val();
+
+            // Check if 'custom' has some customjsonfortechnical after the button click
+            if (Object.keys(customjsonfortechnical['Custom Technical']).length > 0) {
+               var htmlContentTechnical = '';
+
+               for (const custom_technical_super in customjsonfortechnical) {
+                  var custom_technical_super_un1 = custom_technical_super;
+                  var custom_technical_super_un = custom_technical_super_un1.replace(/\s/g, '_');
+                  htmlContentTechnical += `
+                  <p>
+                     <div class="card card-body p-0 m-0 border border-danger">
+                           <div class="row">
+                     
+                              <button class="btn col-xxl-9 col-md-8 col-xl-9 col-lg-8 ms-3" type="button" data-bs-toggle="collapse"
+                                 data-bs-target="#${custom_technical_super_un}" aria-expanded="false"
+                                 aria-controls="${custom_technical_super_un}">
+                           
+                                 <span for="${custom_technical_super_un}1"
+                                             class="d-flex justify-content-between">
+                                             <span class="text-dark">${custom_technical_super}</span>
+                                 </span>
+
+                              </button>
+
+                              <div class="col-2 d-flex justify-content-center align-items-center checkbox-wrapper-40 ">
+                                 <input type="checkbox" style="margin-bottom: 6px;" class=" form-check-input super_check_tec" id="${custom_technical_super_un}1" value="${custom_technical_super}">
+                              </div>
+                        
+                           </div>
+                     </div>
+                  </p>
+            
+                  <div>
+                  <div class="collapse show" id="${custom_technical_super_un}">
+                  <div class="card card-body">`;
+
+                  const parent_technical = customjsonfortechnical[custom_technical_super];
+
+                  for (const custom_technical_parent in parent_technical) {
+                     var custom_technical_parent_un1 = custom_technical_parent;
+                     var custom_technical_parent_un = custom_technical_parent_un1.replace(/\s/g, '_');
+                     htmlContentTechnical += `
+              
+                     <div style="margin-top: 7px;">
+
+                        <div class="checkbox-wrapper-40 " style="margin-top: 7px;">
+                        <span class="checkbox text-dark fw-bold fs-6 ">${custom_technical_parent}</span>
+                        <label class="fs-6 mr-3" for="${custom_technical_super_un}_${custom_technical_parent_un}">
+                              <input type="checkbox"
+                              class=" form-check-input ${custom_technical_super_un}_parent_Technical_checkboxes"
+                              value="${custom_technical_parent}"
+                              id="${custom_technical_super_un}_${custom_technical_parent_un}">
+                        </label>
+                        </div>
+
+                     </div>`;
+
+                     const childkey_technical = parent_technical[custom_technical_parent];
+
+                     for (const custom_technical_child in childkey_technical) {
+                        htmlContentTechnical += `
+                
+                        <div class="row align-items-center pt-1">
+                           <div class="col-md-2 p-0" style="text-align: end;">
+                              <fieldset>
+
+                                 <div class="checkbox-wrapper-40 ">
+                                 <label>
+                                       <input type="checkbox"
+                                          class="me-2 form-check-input ${custom_technical_super_un}_${custom_technical_super_un}_${custom_technical_parent_un}_Technical_child_checkboxes"
+                                          value="${custom_technical_child}"
+                                          id="${custom_technical_super_un}_${custom_technical_child}">
+                                 </label>
+                                 </div> 
+                                 
+                              </fieldset>
+                           </div>
+                           <div class="col-md-5 p-0" style="text-align: start;">
+                              <span class="form-check-label  mr-3">${custom_technical_child}</span>
+                           </div>
+                           <div class="col-md-4 p-0">
+                              <fieldset class="form-group">
+                                 <select
+                                       class="form-select ${custom_technical_super_un}_${custom_technical_super_un}_${custom_technical_parent_un}_Technical_child_selectboxes"
+                                       id="basicSelect" aria-label="Default select example"
+                                       style="font-size: 12px;">
+                                       <option selected>${childkey_technical[custom_technical_child]}</option>
+                                 </select>
+                              </fieldset>
+                           </div>
+                        </div>`;
+                     }
+
+                     // Close the card-body div for the parent
+                  }
+
+                  htmlContentTechnical += `</div></div></div>`; // Close the collapse div for the super
+               }
+
+               // Update the HTML content of 'custom_request_general' after the loop
+               $('#custom_request_technical').html(htmlContentTechnical);
+               // technical_main()
+
+               function technical_main1() {
+
+                  var tec_super_check = document.querySelector('#Custom_Technical1');
+                  tec_super_check.checked = true;
+                  tec_super_parent(tec_super_check);
+                  tec_super_check.addEventListener('click', function () {
+                     tec_super_parent(tec_super_check);
+                  });
+               }
+
+               technical_main1();
+
+            }
+         });
+      });
+
+      //-------------------------------------------------end technical---------------------------------------------
+
+
+
+
+
+
+      function preview_display() {
+         const general_preview = document.getElementById("preview");
+         const technical_preview = document.getElementById("preview_display_for_technical");
+         preview.innerHTML = "";
+         technical_preview.innerHTML = "";
+
+
+         // preview for General Points....
+
+         for (const general_key in jsonData["General Point"]) {
+
+            var sup_gen_un = general_key;
+            var sup_gen_un = sup_gen_un.replace(/_/g, ' ');
+
+            const general_header = document.createElement("span");
+            general_header.innerHTML = `<br><span style="font-weight:900; text-decoration:underline; font-size:0.9rem">${sup_gen_un}</span><br>`;
+            general_preview.appendChild(general_header);
+
+            const general_value = jsonData["General Point"][general_key];
+
+            for (const general_keys in general_value) {
+               var par_gen_un = general_keys;
+               var par_gen_un = par_gen_un.replace(/_/g, ' ');
+
+               const span = document.createElement("span");
+               span.innerHTML = `<br><span style="text-decoration:underline; font-weight:600; font-size:0.9rem">${par_gen_un}</span><br>`;
+               general_preview.appendChild(span);
+
+               const general_keyss = general_value[general_keys];
+
+               for (const general_key1 in general_keyss) {
+                  const span1 = document.createElement("span");;
+                  span1.innerHTML = `<span style="font-weight:600;">${general_key1}:</span><span style="font-weight:500 ;font-style:italic"> ${general_keyss[general_key1]}</span><br>`;
+                  general_preview.appendChild(span1);
+               }
+            }
+         }
+
+
+
+         // preview for Technical Points....
+
+         for (const technical_key in jsonData["Technical Point"]) {
+
+            var sup_tec_un = technical_key;
+            var sup_tec_un = sup_tec_un.replace(/_/g, ' ');
+
+            const technical_header = document.createElement("span");
+            technical_header.innerHTML = `<br><span style="font-weight:900; text-decoration:underline; font-size:0.9rem">${sup_tec_un}</span><br>`;
+            technical_preview.appendChild(technical_header);
+
+            const technical_value = jsonData["Technical Point"][technical_key];
+
+            for (const technical_keys in technical_value) {
+               var par_tec_un = technical_keys;
+               var par_tec_un = par_tec_un.replace(/_/g, ' ');
+
+               const span = document.createElement("span");
+               span.innerHTML = `<br><span style="text-decoration:underline; font-weight:600; font-size:0.9rem">${par_tec_un}</span><br>`;
+               technical_preview.appendChild(span);
+
+               const technical_keyss = technical_value[technical_keys];
+
+               for (const technical_key1 in technical_keyss) {
+                  const span1 = document.createElement("span");;
+                  span1.innerHTML = `<span style="font-weight:600;">${technical_key1}:</span><span style="font-weight:500 ;font-style:italic"> ${technical_keyss[technical_key1]}</span><br>`;
+                  technical_preview.appendChild(span1);
+               }
+            }
+         }
+
+      }
+
+
+
+      $(document).ready(function () {
+         $("#request_creation_form").submit(function (event) {
+            const requestSchema = JSON.stringify(jsonData);
+            const requestName = document.getElementById('requestName').value;
+            event.preventDefault();
+            $.ajax({
+               type: "POST",
+               url: `{% url 'create_request' selectedModule.id %}`, // Replace with the actual URL
+               data: {
+                  data: requestSchema,
+                  request: requestName,
+               },
+               headers: {
+                  'X-CSRFToken': '{{ csrf_token }}'
+               },
+               success: function (response) {
+                  if (response.success) {
+                     window.location.href = "/show_all_request/";
+                  }
+                  else {
+                     $("#duplicatename").html(response.message)
+                  }
+               },
+               error: function (xhr, status, error) {
+                  $("#duplicatename").html(`Error occurred`)
+               }
+            });
+         });
+         //   }
+      });
+
+      preview_display();
+   });
+
+</script>
+<!-- END: Content-->
+
+{% endblock %}
